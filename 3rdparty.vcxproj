@@ -92,12 +92,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ccd\libccd.c" />
+    <ClCompile Include="cgltf.c" />
     <ClCompile Include="glad\gl.c" />
     <ClCompile Include="glfw.c" />
+    <ClCompile Include="m3d.cpp" />
     <ClCompile Include="stb.cpp" />
     <ClCompile Include="tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cgltf.h" />
     <ClInclude Include="glad\gl.h" />
     <ClInclude Include="glfw.h" />
     <ClInclude Include="glmHeader.h" />
@@ -389,6 +392,7 @@
     <ClInclude Include="glm\vec4.hpp" />
     <ClInclude Include="glm\vector_relational.hpp" />
     <ClInclude Include="KHR\khrplatform.h" />
+    <ClInclude Include="m3d.h" />
     <ClInclude Include="stb\stb_image.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
