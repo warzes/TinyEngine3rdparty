@@ -97,6 +97,7 @@
     <ClCompile Include="glfw.c" />
     <ClCompile Include="m3d.cpp" />
     <ClCompile Include="stb.cpp" />
+    <ClCompile Include="tinyobj_loader_c.c" />
     <ClCompile Include="tiny_obj_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +395,7 @@
     <ClInclude Include="KHR\khrplatform.h" />
     <ClInclude Include="m3d.h" />
     <ClInclude Include="stb\stb_image.h" />
+    <ClInclude Include="tinyobj_loader_c.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>

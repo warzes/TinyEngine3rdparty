@@ -16,6 +16,7 @@
     <ClCompile Include="ccd\libccd.c" />
     <ClCompile Include="cgltf.c" />
     <ClCompile Include="m3d.cpp" />
+    <ClCompile Include="tinyobj_loader_c.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="glfw">
@@ -929,6 +930,7 @@
     <ClInclude Include="glmHeader.h" />
     <ClInclude Include="cgltf.h" />
     <ClInclude Include="m3d.h" />
+    <ClInclude Include="tinyobj_loader_c.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\detail\func_common.inl">
