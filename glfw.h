@@ -5058,9 +5058,9 @@ GLFWAPI void glfwSetCursor(GLFWwindow* window, GLFWcursor* cursor);
  *  [character callback](@ref glfwSetCharCallback) instead.
  *
  *  When a window loses input focus, it will generate synthetic key release
- *  events for all pressed keys.  You can tell these events from user-generated
- *  events by the fact that the synthetic ones are generated after the focus
- *  loss event has been processed, i.e. after the
+ *  events for all pressed named keys.  You can tell these events from
+ *  user-generated events by the fact that the synthetic ones are generated
+ *  after the focus loss event has been processed, i.e. after the
  *  [window focus callback](@ref glfwSetWindowFocusCallback) has been called.
  *
  *  The scancode of a key is specific to that platform or sometimes even to that
@@ -7713,7 +7713,6 @@ void _glfwSetWindowOpacityNull(_GLFWwindow* window, float opacity);
 void _glfwSetRawMouseMotionNull(_GLFWwindow *window, GLFWbool enabled);
 GLFWbool _glfwRawMouseMotionSupportedNull(void);
 void _glfwShowWindowNull(_GLFWwindow* window);
-void _glfwRequestWindowAttentionNull(_GLFWwindow* window);
 void _glfwRequestWindowAttentionNull(_GLFWwindow* window);
 void _glfwHideWindowNull(_GLFWwindow* window);
 void _glfwFocusWindowNull(_GLFWwindow* window);
@@ -10843,6 +10842,7 @@ typedef struct _GLFWlibraryLinux
     int                     inotify;
     int                     watch;
     regex_t                 regex;
+    GLFWbool                regexCompiled;
     GLFWbool                dropped;
 } _GLFWlibraryLinux;
 
@@ -23761,7 +23761,7 @@ void _glfwWaitEventsWin32(void)
 
 void _glfwWaitEventsTimeoutWin32(double timeout)
 {
-    MsgWaitForMultipleObjects(0, NULL, FALSE, (DWORD) (timeout * 1e3), QS_ALLEVENTS);
+    MsgWaitForMultipleObjects(0, NULL, FALSE, (DWORD) (timeout * 1e3), QS_ALLINPUT);
 
     _glfwPollEventsWin32();
 }
@@ -36274,7 +36274,7 @@ void _glfwSetWindowMousePassthroughWayland(_GLFWwindow* window, GLFWbool enabled
         wl_region_destroy(region);
     }
     else
-        wl_surface_set_input_region(window->wl.surface, 0);
+        wl_surface_set_input_region(window->wl.surface, NULL);
 }
 
 float _glfwGetWindowOpacityWayland(_GLFWwindow* window)
@@ -42028,7 +42028,8 @@ GLFWbool _glfwInitJoysticksLinux(void)
 
     // Continue without device connection notifications if inotify fails
 
-    if (regcomp(&_glfw.linjs.regex, "^event[0-9]\\+$", 0) != 0)
+    _glfw.linjs.regexCompiled = (regcomp(&_glfw.linjs.regex, "^event[0-9]\\+$", 0) == 0);
+    if (!_glfw.linjs.regexCompiled)
     {
         _glfwInputError(GLFW_PLATFORM_ERROR, "Linux: Failed to compile regex");
         return GLFW_FALSE;
@@ -42080,8 +42081,10 @@ void _glfwTerminateJoysticksLinux(void)
             inotify_rm_watch(_glfw.linjs.inotify, _glfw.linjs.watch);
 
         close(_glfw.linjs.inotify);
-        regfree(&_glfw.linjs.regex);
     }
+
+    if (_glfw.linjs.regexCompiled)
+        regfree(&_glfw.linjs.regex);
 }
 
 GLFWbool _glfwPollJoystickLinux(_GLFWjoystick* js, int mode)
